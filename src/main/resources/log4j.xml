@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="System.out"/>
+      <param name="Threshold" value="INFO"/>
+	  <param name="Encoding" value="UTF-8"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+      </layout>
+   </appender>
+    
+    <appender name="UIC_CLIENT" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/ytxt/log/uic-client/uic-client.log"/>
+        <!--  <param name="DatePattern" value="'.'yyyy-MM-dd"/> -->
+        <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d]-%-5p (%F:%L)|%m%n"/>
+        </layout>
+    </appender>
+    <!-- ============================== -->
+	<!-- Append messages to the console -->
+	<!-- ============================== -->
+	
+	<appender name="USERACC" class="org.apache.log4j.DailyRollingFileAppender">
+      <param name="File" value="/ytxt/log/uic-client/userAccLog/userAccLog"/> <!--日志文件存放目的地,可根据实际情况修改-->
+      <param name="Append" value="true"/>
+	  <param name="Encoding" value="UTF-8"/>
+      <param name="Threshold" value="INFO"/>
+      <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS}%m%n"/>
+      </layout>
+   </appender>
+   
+   <appender name="PointLogAppender" class="org.apache.log4j.DailyRollingFileAppender">
+      <param name="File" value="/ytxt/log/uic-client/pointLog/PointLog.log"/>
+      <param name="Append" value="true"/>
+      <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+                <param name="Encoding" value="UTF-8"/>
+      <param name="Threshold" value="INFO"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%m%n"/>
+      </layout>
+   </appender>
+   
+   <appender name="ExpLogAppender" class="org.apache.log4j.DailyRollingFileAppender">
+     <!-- <param name="File" value="/usr/sqlLoaderData/data/ExpLog.log"/> -->
+      <param name="File" value="/ytxt/log/uic-client/pointLog/ExpLog.log"/>
+      <param name="Append" value="true"/>
+      <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+                <param name="Encoding" value="UTF-8"/>
+      <param name="Threshold" value="INFO"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%m%n"/>
+      </layout>
+   </appender>
+   
+   <!-- 下面部分供调试使用,跟踪mybatis sql语句 -->
+	<appender name="myBatis" class="org.apache.log4j.ConsoleAppender">
+	  <layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern"
+		value="%-4r [%t] %-5p %c %x - %m%n" />
+	  </layout> 
+	  <filter class="org.apache.log4j.varia.LevelRangeFilter">
+	    <param name="LevelMin" value="DEBUG" />
+	    <param name="LevelMax" value="FATAL" />
+	  </filter>
+	</appender>
+	
+	<logger name="USERACCLOG" additivity="false">  
+       <level value ="INFO"/>    
+       <appender-ref ref="USERACC" />    
+	 </logger>
+    
+     <logger name="PointLog" additivity="false">
+        <level value ="INFO"/>
+        <appender-ref ref="PointLogAppender" />
+     </logger>
+     
+     <logger name="com.yutian.uic" additivity="true">
+        <level value ="INFO"/>
+        <appender-ref ref="UIC_CLIENT" />
+     </logger>
+     
+     <logger name="ExpLog" additivity="false">
+        <level value ="INFO"/>
+        <appender-ref ref="ExpLogAppender" />
+     </logger>
+	
+	<logger name="org.apache.ibatis" additivity="true"><level value="DEBUG" /></logger>
+	<logger name="java.sql.Connection" additivity="true"><level value="DEBUG" /></logger>
+	<logger name="java.sql.Statement" additivity="true"><level value="DEBUG" /></logger> 
+	<logger name="java.sql.PreparedStatement" additivity="true">
+	  <level value="DEBUG" />
+	  <appender-ref ref="myBatis" />
+	</logger>
+	<logger name="java.sql.ResultSet" additivity="true">
+	  <level value="DEBUG" />
+	  <appender-ref ref="myBatis" />
+	</logger> 
+	<root>
+		<appender-ref ref="CONSOLE"/>
+        <appender-ref ref="UIC_CLIENT"/>
+	</root>
+	
+</log4j:configuration>
